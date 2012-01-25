@@ -41,6 +41,72 @@ function WMBlog_allow_contributor_uploads() {
 	$contributor->add_cap('upload_files');
 }
 
+
+/* =========================================================
+   Replicate the default meta widget and extend it to include
+   a link to the Wikimedia blog guidelines
+   See https://codex.wordpress.org/Widgets_API for reference */
+
+class WMBlog_meta_widget extends WP_Widget {
+
+	function WMBlog_meta_widget() {
+		// (constructor) Instantiate the parent object
+		parent::WP_Widget( /* Base ID */'WMBlog_meta_widget', /* Name */'WMBlog_meta_widget', array( 'description' => 'The default meta widget plus Wikimedia-specific stuff' ) );
+	}
+
+	function form( $instance ) {
+		// output the options form on admin
+		// i.e. for now only the widget's title
+		if ( $instance ) {
+			$title = esc_attr( $instance[ 'title' ] );
+		}
+		else {
+			$title = __( 'New title', 'text_domain' );
+		}
+		?>
+		<p>
+		<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label> 
+		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
+		</p>
+		<?php 
+	}
+
+	function update( $new_instance, $old_instance ) {
+		// process widget options to be saved
+		$instance = $old_instance;
+		$instance['title'] = strip_tags($new_instance['title']);
+		return $instance;
+	}
+
+	function widget( $args, $instance ) {
+		// output the content of the widget
+		extract( $args );
+		$title = apply_filters( 'widget_title', $instance['title'] );
+		echo $before_widget;
+		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; } ?>
+			<ul>
+			<?php wp_register(); ?>
+			<li><?php wp_loginout(); ?></li>
+			<li><a href="//meta.wikimedia.org/wiki/Wikimedia_Blog/Guidelines" title="General contribution guidelines for the Wikimedia blog">Blog guidelines</a></li>
+			<li><a href="<?php bloginfo('rss2_url'); ?>" title="<?php echo esc_attr(__('Syndicate this site using RSS 2.0')); ?>"><?php _e('Entries <abbr title="Really Simple Syndication">RSS</abbr>'); ?></a></li>
+			<li><a href="<?php bloginfo('comments_rss2_url'); ?>" title="<?php echo esc_attr(__('The latest comments to all posts in RSS')); ?>"><?php _e('Comments <abbr title="Really Simple Syndication">RSS</abbr>'); ?></a></li>
+			<li><a href="http://wordpress.org/" title="<?php echo esc_attr(__('Powered by WordPress, state-of-the-art semantic personal publishing platform.')); ?>">WordPress.org</a></li>
+			<?php wp_meta(); ?>
+			</ul>
+		<?php echo $after_widget;
+	}
+
+}
+
+function WMBlog_register_widgets() {
+	// register the plugin's available widgets
+	register_widget( 'WMBlog_meta_widget' );
+}
+
+// plug in the widgets registration
+add_action( 'widgets_init', 'WMBlog_register_widgets' );
+
+
 /* =========================================================
    Do stuff when the plugin is activated. This includes calling the other
    plugin functions that actually do stuff. */
@@ -48,8 +114,8 @@ function WMBlog_allow_contributor_uploads() {
 register_activation_hook( __FILE__, 'WMBlog_setup' );
 
 function WMBlog_setup() {
-	WMBlog_allow_contributor_uploads();
-}
+	// Allow contributors to upload files
+	WMBlog_allow_contributor_uploads();}
 
 
 /* =========================================================
