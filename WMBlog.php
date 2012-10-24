@@ -50,6 +50,18 @@ function WMBlog_allow_author_edit_others_posts() {
 	$author->add_cap('edit_others_posts');
 }
 
+/* =========================================================
+   Prevent authors from making the first publication of a
+   post, to ensure proper review. This doesn't prevent
+   authors from editing and updating already published posts,
+   e.g. they can fix typos and moderate comments.
+   
+   This setting is written to the database. */
+
+function WMBlog_disallow_author_initial_publish() {
+	$author = get_role('author');
+	$author->remove_cap('publish_posts');
+}
 
 /* =========================================================
    Replicate the default meta widget and extend it to include
@@ -127,6 +139,8 @@ function WMBlog_setup() {
 	WMBlog_allow_contributor_uploads();
 	// Allow authors to edit other people's posts
 	WMBlog_allow_author_edit_others_posts();
+	// Prevent authors from publishing posts
+	WMBlog_disallow_author_initial_publish();
 }
 
 
@@ -141,6 +155,7 @@ function WMBlog_cleanup(){
 	// Restore user rights to WordPress defaults
 	$wp_roles->remove_cap( 'contributor', 'upload_files' );
 	$wp_roles->remove_cap( 'author', 'edit_others_posts' );
+	$wp_roles->add_cap( 'author', 'publish_posts' );
 }
 
 ?>
