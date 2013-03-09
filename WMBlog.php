@@ -41,6 +41,15 @@ function WMBlog_allow_contributor_uploads() {
 	$contributor->add_cap('upload_files');
 }
 
+/* =========================================================
+   Allow authors to edit others' posts
+   This setting is written to the database. */
+
+function WMBlog_allow_author_edit_others_posts() {
+	$author = get_role('author');
+	$author->add_cap('edit_others_posts');
+}
+
 
 /* =========================================================
    Replicate the default meta widget and extend it to include
@@ -139,7 +148,10 @@ register_activation_hook( __FILE__, 'WMBlog_setup' );
 
 function WMBlog_setup() {
 	// Allow contributors to upload files
-	WMBlog_allow_contributor_uploads();}
+	WMBlog_allow_contributor_uploads();
+	// Allow authors to edit other people's posts
+	WMBlog_allow_author_edit_others_posts();
+}
 
 
 /* =========================================================
@@ -150,7 +162,9 @@ register_deactivation_hook( __FILE__, 'WMBlog_cleanup' );
 
 function WMBlog_cleanup(){
 	global $wp_roles;
+	// Restore user rights to WordPress defaults
 	$wp_roles->remove_cap( 'contributor', 'upload_files' );
+	$wp_roles->remove_cap( 'author', 'edit_others_posts' );
 }
 
 ?>
