@@ -99,29 +99,6 @@ class WMBlog_meta_widget extends WP_Widget {
 		return $instance;
 	}
 
-	function get_eventlogging_url() {
-		// construct url for logging current request using EventLogging API
-		// url should be set as the 'src' attribute of an image
-		// see <http://mediawiki.org/wiki/Extension:EventLogging>.
-		if ( empty( $_SERVER['REQUEST_URI'] ) ) {
-			return false;
-		}
-
-		$event = array(
-			'event' => array( 'requestUrl' => $_SERVER['REQUEST_URI'] ),
-			'revision' => 5308166,
-			'schema' => 'WikimediaBlogVisit',
-			'webHost' => $_SERVER['HTTP_HOST'],
-			'wiki' => 'blog'
-		);
-
-		if ( !empty( $_SERVER['HTTP_REFERER'] ) ) {
-			$event['event']['referrerUrl'] = $_SERVER['HTTP_REFERER'];
-		}
-
-		return urlencode( json_encode( $event ) );
-	}
-
 	function widget( $args, $instance ) {
 		// output the content of the widget
 		extract( $args );
@@ -137,7 +114,6 @@ class WMBlog_meta_widget extends WP_Widget {
 			<li><a href="http://wordpress.org/" title="<?php echo esc_attr(__('Powered by WordPress, state-of-the-art semantic personal publishing platform.')); ?>">WordPress.org</a></li>
 			<?php wp_meta(); ?>
 			</ul>
-			<img style="display: none;" src="//bits.wikimedia.org/event.gif?<?php echo $this->get_eventlogging_url(); ?>;">
 		<?php echo $after_widget;
 	}
 
