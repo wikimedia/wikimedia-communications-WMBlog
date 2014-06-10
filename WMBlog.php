@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: WMBlog
-Plugin URI: http://blog.wikimedia.org
+Plugin URI: https://blog.wikimedia.org
 Description: A WordPress plugin bringing functionality specific to the Wikimedia blog
 Version: 0.1
 Author: Guillaume Paumier
-Author URI: http://www.gpaumier.org
+Author URI: https://guillaumepaumier.com/
 License: GPLv3
 
 /*  Copyright 2011 Guillaume Paumier  (email : guillaume@gpaumier.org)
@@ -111,7 +111,7 @@ class WMBlog_meta_widget extends WP_Widget {
 			<li><a href="//meta.wikimedia.org/wiki/Wikimedia_Blog/Guidelines" title="General contribution guidelines for the Wikimedia blog">Blog guidelines</a></li>
 			<li><a href="<?php bloginfo('rss2_url'); ?>" title="<?php echo esc_attr(__('Syndicate this site using RSS 2.0')); ?>"><?php _e('Entries <abbr title="Really Simple Syndication">RSS</abbr>'); ?></a></li>
 			<li><a href="<?php bloginfo('comments_rss2_url'); ?>" title="<?php echo esc_attr(__('The latest comments to all posts in RSS')); ?>"><?php _e('Comments <abbr title="Really Simple Syndication">RSS</abbr>'); ?></a></li>
-			<li><a href="http://wordpress.org/" title="<?php echo esc_attr(__('Powered by WordPress, state-of-the-art semantic personal publishing platform.')); ?>">WordPress.org</a></li>
+			<li><a href="//wordpress.org/" title="<?php echo esc_attr(__('Powered by WordPress, state-of-the-art semantic personal publishing platform.')); ?>">WordPress.org</a></li>
 			<?php wp_meta(); ?>
 			</ul>
 		<?php echo $after_widget;
